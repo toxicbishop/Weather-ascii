@@ -10,7 +10,7 @@ use crossterm::{
 use std::io::{self, BufWriter, IsTerminal, Stdout, Write};
 
 const MIN_TERMINAL_WIDTH: u16 = 70;
-const MIN_TERMINAL_HEIGHT: u16 = 20;
+const MIN_TERMINAL_HEIGHT: u16 = 15;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 struct Cell {
