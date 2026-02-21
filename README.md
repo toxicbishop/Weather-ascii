@@ -16,7 +16,7 @@
 
 <br/>
 
-## 🌟 About The Project
+## About The Project
 
 **weather** is an aesthetically pleasing, terminal-based application that brings you the weather in a uniquely visual way. Driven by real-time data from Open-Meteo, it renders immersive ASCII animations of current weather conditions right in your command line.
 
@@ -40,7 +40,7 @@ Experience rain drops falling across your terminal, lightning strikes on a storm
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 To get a local copy up and running, follow these simple steps.
 
@@ -70,7 +70,7 @@ cargo install --path .
 
 ---
 
-## 🛠️ Configuration
+## Configuration
 
 `weather` runs flawlessly out of the box, but can be highly tailored via a `config.toml` file.
 
@@ -112,7 +112,7 @@ precipitation = "mm"
 
 ---
 
-## 🎮 Usage 
+## Usage 
 
 Run the app normally to see the live weather for your area:
 ```bash
