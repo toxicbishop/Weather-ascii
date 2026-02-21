@@ -1,15 +1,15 @@
 <br/>
 <div align="center">
-  <h1 align="center">🌤️ weathr</h1>
+  <h1 align="center">🌤️ weather</h1>
   <p align="center">
     <strong>A terminal weather app with ASCII animations driven by real-time weather data.</strong>
   </p>
   <p align="center">
-    <a href="https://github.com/toxicbishop/weathr/commits/main">
-      <img src="https://img.shields.io/github/last-commit/toxicbishop/weathr" alt="Last Commit" />
+    <a href="https://github.com/toxicbishop/weather/commits/main">
+      <img src="https://img.shields.io/github/last-commit/toxicbishop/weather" alt="Last Commit" />
     </a>
-    <a href="https://github.com/toxicbishop/weathr/blob/main/LICENSE">
-      <img src="https://img.shields.io/github/license/toxicbishop/weathr" alt="License" />
+    <a href="https://github.com/toxicbishop/weather/blob/main/LICENSE">
+      <img src="https://img.shields.io/github/license/toxicbishop/weather" alt="License" />
     </a>
   </p>
 </div>
@@ -18,7 +18,7 @@
 
 ## 🌟 About The Project
 
-**Weathr** is an aesthetically pleasing, terminal-based application that brings you the weather in a uniquely visual way. Driven by real-time data from Open-Meteo, it renders immersive ASCII animations of current weather conditions right in your command line.
+**weather** is an aesthetically pleasing, terminal-based application that brings you the weather in a uniquely visual way. Driven by real-time data from Open-Meteo, it renders immersive ASCII animations of current weather conditions right in your command line.
 
 Experience rain drops falling across your terminal, lightning strikes on a stormy night, or calm clear skies with a sun and birds perfectly rendered in ASCII art.
 
@@ -54,35 +54,35 @@ Clone the repository and install it using Cargo:
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/toxicbishop/weathr.git
+git clone https://github.com/toxicbishop/weather.git
 
 # 2. Navigate into the directory
-cd weathr
+cd weather
 
 # 3. Build and install via Cargo
 cargo install --path .
 ```
 
 *Other Platforms:*
-- **Windows Winget:** `winget install -i Veirt.weathr`
-- **Arch Linux:** `yay -S weathr`
-- **macOS:** `brew install Veirt/veirt/weathr`
+- **Windows Winget:** `winget install -i Veirt.weather`
+- **Arch Linux:** `yay -S weather`
+- **macOS:** `brew install Veirt/veirt/weather`
 
 ---
 
 ## 🛠️ Configuration
 
-`Weathr` runs flawlessly out of the box, but can be highly tailored via a `config.toml` file.
+`weather` runs flawlessly out of the box, but can be highly tailored via a `config.toml` file.
 
 **File Location:**
-- **Windows:** `~/AppData/Roaming/weathr/config.toml`
-- **Linux:** `~/.config/weathr/config.toml` 
-- **macOS:** `~/Library/Application Support/weathr/config.toml`
+- **Windows:** `~/AppData/Roaming/weather/config.toml`
+- **Linux:** `~/.config/weather/config.toml` 
+- **macOS:** `~/Library/Application Support/weather/config.toml`
 
 **Example Configuration:**
 
 ```toml
-# weathr/config.toml
+# weather/config.toml
 
 # Hide the HUD (Heads Up Display) with weather details
 hide_hud = false
@@ -116,10 +116,10 @@ precipitation = "mm"
 
 Run the app normally to see the live weather for your area:
 ```bash
-weathr
+weather
 ```
 
-> **Note:** Weathr requires a terminal size of at least `70x20` characters to display its ASCII layouts correctly.
+> **Note:** weather requires a terminal size of at least `70x20` characters to display its ASCII layouts correctly.
 
 ### Keyboard Controls
 - **`q`** or **`Q`**: Quit the application
@@ -130,17 +130,17 @@ You can easily override your config values for a single run using CLI flags:
 
 ```bash
 # Force metric or imperial units
-weathr --metric
-weathr --imperial
+weather --metric
+weather --imperial
 
 # UI adjustments
-weathr --hide-hud
-weathr --hide-location
+weather --hide-hud
+weather --hide-location
 
 # Simulate conditions (Great for testing!)
-weathr --simulate rain
-weathr --simulate snow --night
-weathr --simulate clear --leaves
+weather --simulate rain
+weather --simulate snow --night
+weather --simulate clear --leaves
 ```
 
 *Available Simulation States: `clear`, `partly-cloudy`, `cloudy`, `overcast`, `fog`, `drizzle`, `rain`, `freezing-rain`, `rain-showers`, `snow`, `snow-grains`, `snow-showers`, `thunderstorm`, `thunderstorm-hail`*
@@ -161,4 +161,3 @@ Distributed under the **GPL-3.0-or-later** License. See [`LICENSE`](LICENSE) for
 
 - **Data source:** [Open-Meteo](https://open-meteo.com/) (CC BY 4.0 license)
 - **ASCII Art:** Adapted from original artists at [asciiart.eu](https://www.asciiart.eu/) (including Joan G. Stark, Hayley Jane Wakenshaw, and others). 
-- **Forked/Adapted Original work:** Inspired by and originally developed as a Rust port.

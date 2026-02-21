@@ -1,0 +1,51 @@
+[package]
+name = "weathr"
+version = "1.3.0"
+edition = "2024"
+rust-version = "1.85.0"
+license = "GPL-3.0-or-later"
+authors = ["Dony Mulya <veirt@duck.com>"]
+description = "A terminal-based ASCII weather application with animated scenes driven by real-time weather data"
+repository = "https://github.com/veirt/weathr"
+homepage = "https://github.com/veirt/weathr"
+documentation = "https://github.com/veirt/weathr#readme"
+keywords = ["weather", "terminal", "ascii", "cli", "tui"]
+categories = ["command-line-utilities"]
+exclude = [".github/", "docs/"]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.9"
+dirs = "6.0"
+crossterm = "0.29"
+tokio = { version = "1", features = [
+    "rt-multi-thread",
+    "sync",
+    "time",
+    "macros",
+    "signal",
+    "fs",
+] }
+reqwest = { version = "0.13", features = ["json"] }
+async-trait = "0.1"
+clap = { version = "4.5", features = ["derive"] }
+rand = "0.10"
+chrono = "0.4"
+thiserror = "2.0"
+clap_complete = "4.5.66"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = true
+
+[profile.dev]
+opt-level = 1
+
+[profile.profiling]
+inherits = "release"
+debug = 2
+strip = false
+lto = false
+opt-level = 2
