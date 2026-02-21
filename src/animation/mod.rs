@@ -11,6 +11,7 @@ pub mod snow;
 pub mod stars;
 pub mod sunny;
 pub mod thunderstorm;
+pub mod ufo;
 
 use crate::render::TerminalRenderer;
 use crossterm::style::Color;

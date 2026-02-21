@@ -2,7 +2,7 @@ use crate::animation::{
     AnimationController, airplanes::AirplaneSystem, birds::BirdSystem, chimney::ChimneySmoke,
     clouds::CloudSystem, fireflies::FireflySystem, fog::FogSystem, leaves::FallingLeaves,
     moon::MoonSystem, raindrops::RaindropSystem, snow::SnowSystem, stars::StarSystem,
-    sunny::SunnyAnimation, thunderstorm::ThunderstormSystem,
+    sunny::SunnyAnimation, thunderstorm::ThunderstormSystem, ufo::UfoSystem,
 };
 use crate::app_state::AppState;
 use crate::render::TerminalRenderer;
@@ -25,6 +25,7 @@ pub struct AnimationManager {
     airplane_system: AirplaneSystem,
     star_system: StarSystem,
     moon_system: MoonSystem,
+    ufo_system: UfoSystem,
     chimney_smoke: ChimneySmoke,
     firefly_system: FireflySystem,
     falling_leaves: FallingLeaves,
@@ -46,6 +47,7 @@ impl AnimationManager {
             airplane_system: AirplaneSystem::new(term_width, term_height),
             star_system: StarSystem::new(term_width, term_height),
             moon_system: MoonSystem::new(term_width, term_height),
+            ufo_system: UfoSystem::new(term_width, term_height),
             chimney_smoke: ChimneySmoke::new(),
             firefly_system: FireflySystem::new(term_width, term_height),
             falling_leaves: FallingLeaves::new(term_width, term_height),
@@ -91,6 +93,11 @@ impl AnimationManager {
             self.star_system.render(renderer)?;
             self.moon_system.update(term_width, term_height);
             self.moon_system.render(renderer)?;
+
+            if !conditions.is_raining && !conditions.is_thunderstorm && !conditions.is_snowing {
+                self.ufo_system.update(term_width, term_height, &mut rng);
+                self.ufo_system.render(renderer)?;
+            }
 
             if state.should_show_fireflies() {
                 self.firefly_system
