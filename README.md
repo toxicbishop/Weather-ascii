@@ -140,7 +140,8 @@ weather --hide-location
 # Simulate conditions (Great for testing!)
 weather --simulate rain
 weather --simulate snow --night
-weather --simulate clear --leaves
+# Simulate UFO (Shows up on clear night)
+weather --simulate clear --night
 ```
 
 *Available Simulation States: `clear`, `partly-cloudy`, `cloudy`, `overcast`, `fog`, `drizzle`, `rain`, `freezing-rain`, `rain-showers`, `snow`, `snow-grains`, `snow-showers`, `thunderstorm`, `thunderstorm-hail`*
