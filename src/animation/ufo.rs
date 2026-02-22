@@ -38,7 +38,8 @@ impl UfoSystem {
             ufo.y += ufo.wobble_phase.sin() * 0.2; // vertical wobble
         }
 
-        self.ufos.retain(|p| p.x < terminal_width as f32 && p.x > -20.0);
+        self.ufos
+            .retain(|p| p.x < terminal_width as f32 && p.x > -20.0);
 
         self.spawn_cooldown = self.spawn_cooldown.saturating_sub(1);
         if self.spawn_cooldown == 0 && rng.random::<f32>() < 0.005 {
@@ -50,8 +51,13 @@ impl UfoSystem {
     fn spawn_ufo(&mut self, rng: &mut impl Rng) {
         let y = (rng.random::<u16>() % (self.terminal_height / 3)) as f32;
         let speed = 0.5 + (rng.random::<f32>() * 0.5); // A bit faster than airplanes
-        
-        self.ufos.push(Ufo { x: -15.0, y, speed, wobble_phase: 0.0 });
+
+        self.ufos.push(Ufo {
+            x: -15.0,
+            y,
+            speed,
+            wobble_phase: 0.0,
+        });
     }
 
     pub fn render(&self, renderer: &mut TerminalRenderer) -> io::Result<()> {
