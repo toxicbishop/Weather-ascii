@@ -2,58 +2,65 @@
 <div align="center">
   <h1 align="center">🌤️ weather</h1>
   <p align="center">
-    <strong>A terminal weather app with ASCII animations driven by real-time weather data.</strong>
-  </p>
-  <p align="center">
-    <a href="https://github.com/toxicbishop/weather/commits/main">
-      <img src="https://img.shields.io/github/last-commit/toxicbishop/weather" alt="Last Commit" />
-    </a>
-    <a href="https://github.com/toxicbishop/weather/blob/main/LICENSE">
-      <img src="https://img.shields.io/github/license/toxicbishop/weather" alt="License" />
-    </a>
+    <strong>A beautiful terminal weather app with dynamic ASCII animations driven by real-time data.</strong>
   </p>
 </div>
 
 <br/>
 
-## About The Project
+## 📖 About The Project
 
-**weather** is an aesthetically pleasing, terminal-based application that brings you the weather in a uniquely visual way. Driven by real-time data from Open-Meteo, it renders immersive ASCII animations of current weather conditions right in your command line.
+**weather** is an aesthetically pleasing, terminal-based application that brings you the weather in a uniquely visual way. Driven by real-time data from [Open-Meteo](https://open-meteo.com/), it renders immersive ASCII animations of current weather conditions right in your command line.
 
-Experience rain drops falling across your terminal, lightning strikes on a stormy night, or calm clear skies with a sun and birds perfectly rendered in ASCII art.
+Experience rain drops falling across your terminal, lightning strikes on a stormy night, flying airplanes, or calm clear skies with a perfectly rendered ASCII sun and birds.
 
 <div align="center">
 
-|                                    Thunderstorm Night                                     |                             Snow                              |
-| :---------------------------------------------------------------------------------------: | :-----------------------------------------------------------: |
-| <img src="docs/thunderstorm-night.gif" width="600" height="400" alt="Thunderstorm Night"> | <img src="docs/snow.gif" width="600" height="400" alt="Snow"> |
+| Thunderstorm Night | Snow |
+| :---: | :---: |
+| <img src="docs/thunderstorm-night.gif" width="600" alt="Thunderstorm Night"> | <img src="docs/snow.gif" width="600" alt="Snow"> |
 
 </div>
 
-### ✨ Key Features Let It Shine
+## ✨ Key Features
 
-- **Real-Time Accuracy:** Powered by Open-Meteo for precise meteorological data.
-- **Dynamic ASCII Animations:** Supports rain, snow, thunderstorms, clouds, day/night cycles, and flying airplanes.
-- **Auto-Location:** Automatically fetch the weather for your current IP address without any setup.
-- **Highly Customizable:** Adjust units (metric/imperial), hide standard readouts, toggle UI elements.
-- **Aesthetic Terminal UI:** Clean, minimalist standard readout paired with bold ASCII visuals.
+- 🎯 **Real-Time Accuracy:** Powered by Open-Meteo for precise, up-to-date meteorological data.
+- 🎨 **Dynamic ASCII Animations:** Enjoy immersive visuals including rain, snow, thunderstorms, passing clouds, day/night cycles, airplanes, and even rare UFO sightings!
+- 🌍 **Auto-Location Detection:** Automatically fetches weather for your current IP address with zero manual setup.
+- ⚙️ **Highly Customizable:** Easily switch between metric/imperial units, toggle UI elements, and manage your preferred default layout via a `config.toml`.
+- 💻 **Aesthetic Terminal UI:** A clean, minimalist layout that perfectly complements the bold ASCII visuals seamlessly.
 
 ---
 
-## Getting Started
+## 📑 Table of Contents
 
-To get a local copy up and running, follow these simple steps.
+- [About The Project](#-about-the-project)
+- [Key Features](#-key-features)
+- [Installation](#-getting-started)
+- [Usage](#-usage)
+  - [Keyboard Controls](#keyboard-controls)
+  - [Command Line Overrides \& Simulation](#command-line-overrides)
+- [Configuration](#-configuration)
+- [Roadmap](#-roadmap)
+- [Contributing](#-contributing)
+- [License \& Credits](#-license--credits)
+
+---
+
+## 🚀 Getting Started
+
+Follow these steps to get a local copy up and running on your machine.
 
 ### Prerequisites
 
-You will need the Rust package manager (`cargo`) installed. If you don't have it, get it from [rustup.rs](https://rustup.rs/).
+Ensure you have the Rust package manager (`cargo`) installed. If not, follow the instructions at [rustup.rs](https://rustup.rs/).
 
 ### Installation
 
 Clone the repository and install it using Cargo:
 
 ```bash
-# 1. Clone the repo
+# 1. Clone the repository
 git clone https://github.com/toxicbishop/weather.git
 
 # 2. Navigate into the directory
@@ -63,70 +70,28 @@ cd weather
 cargo install --path .
 ```
 
-*Other Platforms:*
+*Package Managers:*
 - **Windows Winget:** `winget install -i Veirt.weather`
 - **Arch Linux:** `yay -S weather`
 - **macOS:** `brew install Veirt/veirt/weather`
 
 ---
 
-## Configuration
+## 💻 Usage 
 
-`weather` runs flawlessly out of the box, but can be highly tailored via a `config.toml` file.
-
-**File Location:**
-- **Windows:** `~/AppData/Roaming/weather/config.toml`
-- **Linux:** `~/.config/weather/config.toml` 
-- **macOS:** `~/Library/Application Support/weather/config.toml`
-
-**Example Configuration:**
-
-```toml
-# weather/config.toml
-
-# Hide the HUD (Heads Up Display) with weather details
-hide_hud = false
-
-# Run silently without startup messages
-silent = false
-
-[location]
-# Location coordinates (overridden if auto = true)
-latitude = 40.7128
-longitude = -74.0060
-
-# Auto-detect location via IP
-auto = true
-
-# Hide the location name in the UI
-hide = false
-
-[units]
-# Units: "celsius" | "fahrenheit"
-temperature = "celsius"
-# Units: "kmh" | "ms" | "mph" | "kn"
-wind_speed = "kmh"
-# Units: "mm" | "inch"
-precipitation = "mm"
-```
-
----
-
-## Usage 
-
-Run the app normally to see the live weather for your area:
+Simply run the app to see the live weather for your area:
 ```bash
 weather
 ```
 
-> **Note:** weather requires a terminal size of at least `70x20` characters to display its ASCII layouts correctly.
+> **Note:** `weather` requires a terminal size of at least `70x20` characters to display its ASCII layouts correctly.
 
 ### Keyboard Controls
-- **`q`** or **`Q`**: Quit the application
-- **`Ctrl+C`**: Force Exit
+- **`q`** or **`Q`**: Gracefully quit the application.
+- **`Ctrl+C`**: Force exit.
 
 ### Command Line Overrides
-You can easily override your config values for a single run using CLI flags:
+You can temporarily override your configuration values for a single run using CLI flags:
 
 ```bash
 # Force metric or imperial units
@@ -137,22 +102,70 @@ weather --imperial
 weather --hide-hud
 weather --hide-location
 
-# Simulate conditions (Great for testing!)
+# Simulate specific weather conditions (Great for testing!)
 weather --simulate rain
 weather --simulate snow --night
-# Simulate UFO (Shows up on clear night)
+
+# Easter Egg Simulation (UFO appears on a clear night)
 weather --simulate clear --night
 ```
 
-*Available Simulation States: `clear`, `partly-cloudy`, `cloudy`, `overcast`, `fog`, `drizzle`, `rain`, `freezing-rain`, `rain-showers`, `snow`, `snow-grains`, `snow-showers`, `thunderstorm`, `thunderstorm-hail`*
+*Available Simulation States:* `clear`, `partly-cloudy`, `cloudy`, `overcast`, `fog`, `drizzle`, `rain`, `freezing-rain`, `rain-showers`, `snow`, `snow-grains`, `snow-showers`, `thunderstorm`, `thunderstorm-hail`
+
+---
+
+## ⚙️ Configuration
+
+`weather` functions beautifully out of the box but can be deeply customized using a `config.toml` file.
+
+**File Locations:**
+- **Windows:** `~\AppData\Roaming\weather\config.toml`
+- **Linux:** `~/.config/weather/config.toml` 
+- **macOS:** `~/Library/Application Support/weather/config.toml`
+
+**Example `config.toml`:**
+
+```toml
+# Display Settings
+hide_hud = false       # Hide the standard readout interface
+silent = false         # Start the app without init messages
+
+# Location Settings
+[location]
+latitude = 40.7128     # Kept if auto is false
+longitude = -74.0060
+auto = true            # Automatically fetch coordinate via IP
+hide = false           # Hide location name in the top bar
+
+# Unit Preferences
+[units]
+temperature = "celsius" # Options: "celsius", "fahrenheit"
+wind_speed = "kmh"      # Options: "kmh", "ms", "mph", "kn"
+precipitation = "mm"    # Options: "mm", "inch"
+```
 
 ---
 
 ## 📝 Roadmap
 
-- [ ] Support for adding multiple API keys (OpenWeatherMap, WeatherAPI, etc.)
-- [x] Initial release features & auto-location API structure
-- [ ] Implement keybindings to pause/speed up animations interactively.
+- [x] Initial release features & auto-location fetching
+- [x] GNU GPL-3.0 License migration
+- [x] Add dynamic UFO and Airplane animations
+- [ ] Support for multiple API keys (OpenWeatherMap, WeatherAPI, etc.)
+- [ ] Implement keybindings to pause/speed up animations interactively
+- [ ] Additional weather simulation patterns
+
+---
+
+## 🤝 Contributing
+
+Contributions make the open-source community an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ---
 
