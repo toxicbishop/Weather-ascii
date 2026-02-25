@@ -34,16 +34,19 @@ Experience rain drops falling across your terminal, lightning strikes on a storm
 
 ## 📑 Table of Contents
 
-- [About The Project](#-about-the-project)
-- [Key Features](#-key-features)
-- [Installation](#-getting-started)
-- [Usage](#-usage)
+- [📖 About The Project](#-about-the-project)
+- [✨ Key Features](#-key-features)
+- [📑 Table of Contents](#-table-of-contents)
+- [🚀 Getting Started](#-getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [💻 Usage](#-usage)
   - [Keyboard Controls](#keyboard-controls)
-  - [Command Line Overrides \& Simulation](#command-line-overrides)
-- [Configuration](#-configuration)
-- [Roadmap](#-roadmap)
-- [Contributing](#-contributing)
-- [License \& Credits](#-license--credits)
+  - [Command Line Overrides](#command-line-overrides)
+- [⚙️ Configuration](#️-configuration)
+- [📝 Roadmap](#-roadmap)
+- [🤝 Contributing](#-contributing)
+- [📜 License \& Credits](#-license--credits)
 
 ---
 
@@ -94,6 +97,9 @@ weather
 You can temporarily override your configuration values for a single run using CLI flags:
 
 ```bash
+# Normal Usage
+weather
+
 # Force metric or imperial units
 weather --metric
 weather --imperial
@@ -108,12 +114,382 @@ weather --simulate snow --night
 
 # Easter Egg Simulation (UFO appears on a clear night)
 weather --simulate clear --night
+
+# Simulate rain
+weather --simulate rain
+
+# Simulate snow
+weather --simulate snow
+
+# Simulate thunderstorm
+weather --simulate thunderstorm
+
+# Simulate fog
+weather --simulate fog
+
+# Simulate drizzle
+weather --simulate drizzle
+
+# Simulate freezing rain
+weather --simulate freezing-rain
+
+# Simulate rain showers
+weather --simulate rain-showers
+
+# Simulate snow showers
+weather --simulate snow-showers
+
+# Simulate snow grains
+weather --simulate snow-grains
+
+# Simulate thunderstorm hail
+weather --simulate thunderstorm-hail
+
+# Simulate partly cloudy
+weather --simulate partly-cloudy
+
+# Simulate cloudy
+weather --simulate cloudy
+
+# Simulate overcast
+weather --simulate overcast
+
+# Simulate fog
+weather --simulate fog
+
+# Simulate drizzle
+weather --simulate drizzle
+
+# Simulate freezing rain
+weather --simulate freezing-rain
+
+# Simulate rain showers
+weather --simulate rain-showers
+
+# Simulate snow showers
+weather --simulate snow-showers
+
+# Simulate snow grains
+weather --simulate snow-grains
+
+# Simulate thunderstorm hail
+weather --simulate thunderstorm-hail
+
+# Simulate partly cloudy
+weather --simulate partly-cloudy
+
+# Simulate cloudy
+weather --simulate cloudy
+
+# Simulate overcast
+weather --simulate overcast
+
+# Simulate fog
+weather --simulate fog
+
+# Simulate drizzle
+weather --simulate drizzle
+
+# Simulate freezing rain
+weather --simulate freezing-rain
+
+# Simulate rain showers
+weather --simulate rain-showers
+
+# Simulate snow showers
+weather --simulate snow-showers
+
+# Simulate snow grains
+weather --simulate snow-grains
+
+# Simulate thunderstorm hail
+weather --simulate thunderstorm-hail
+
+# Simulate partly cloudy
+weather --simulate partly-cloudy
+
+# Simulate cloudy
+weather --simulate cloudy
+
+# Simulate overcast
+weather --simulate overcast
+
+# Simulate fog
+weather --simulate fog
+
+# Simulate drizzle
+weather --simulate drizzle
+
+# Simulate freezing rain
+weather --simulate freezing-rain
+
+# Simulate rain showers
+weather --simulate rain-showers
+
+# Simulate snow showers
+weather --simulate snow-showers
+
+# Simulate snow grains
+weather --simulate snow-grains
+
+# Simulate thunderstorm hail
+weather --simulate thunderstorm-hail
+
+# Simulate partly cloudy
+weather --simulate partly-cloudy
+
+# Simulate cloudy
+weather --simulate cloudy
+
+# Simulate overcast
+weather --simulate overcast
+
+# Simulate fog
+weather --simulate fog
+
+# Simulate drizzle
+weather --simulate drizzle
+
+# Simulate freezing rain
+weather --simulate freezing-rain
+
+# Simulate rain showers
+weather --simulate rain-showers
+
+# Simulate snow showers
+weather --simulate snow-showers
+
+# Simulate snow grains
+weather --simulate snow-grains
+
+# Simulate thunderstorm hail
+weather --simulate thunderstorm-hail
+
+# Simulate partly cloudy
+weather --simulate partly-cloudy
+
+# Simulate cloudy
+weather --simulate cloudy
+
+# Simulate overcast
+weather --simulate overcast
+
+# Simulate fog
+weather --simulate fog
+
+# Simulate drizzle
+weather --simulate drizzle
+
+# Simulate freezing rain
+weather --simulate freezing-rain
+
+# Simulate rain showers
+weather --simulate rain-showers
+
+# Simulate snow showers
+weather --simulate snow-showers
+
+# Simulate snow grains
+weather --simulate snow-grains
+
+# Simulate thunderstorm hail
+weather --simulate thunderstorm-hail
+
+# Simulate partly cloudy
+weather --simulate partly-cloudy
+
+# Simulate cloudy
+weather --simulate cloudy
+
+# Simulate overcast
+weather --simulate overcast
+
+# Simulate fog
+weather --simulate fog
+
+# Simulate drizzle
+weather --simulate drizzle
+
+# Simulate freezing rain
+weather --simulate freezing-rain
+
+# Simulate rain showers
+weather --simulate rain-showers
+
+# Simulate snow showers
+weather --simulate snow-showers
+
+# Simulate snow grains
+weather --simulate snow-grains
+
+# Simulate thunderstorm hail
+weather --simulate thunderstorm-hail
+
+# Simulate partly cloudy
+weather --simulate partly-cloudy
+
+# Simulate cloudy
+weather --simulate cloudy
+
+# Simulate overcast
+weather --simulate overcast
+
+# Simulate fog
+weather --simulate fog
+
+# Simulate drizzle
+weather --simulate drizzle
+
+# Simulate freezing rain
+weather --simulate freezing-rain
+
+# Simulate rain showers
+weather --simulate rain-showers
+
+# Simulate snow showers
+weather --simulate snow-showers
+
+# Simulate snow grains
+weather --simulate snow-grains
+
+# Simulate thunderstorm hail
+weather --simulate thunderstorm-hail
+
+# Simulate partly cloudy
+weather --simulate partly-cloudy
+
+# Simulate cloudy
+weather --simulate cloudy
+
+# Simulate overcast
+weather --simulate overcast
+
+# Simulate fog
+weather --simulate fog
+
+# Simulate drizzle
+weather --simulate drizzle
+
+# Simulate freezing rain
+weather --simulate freezing-rain
+
+# Simulate rain showers
+weather --simulate rain-showers
+
+# Simulate snow showers
+weather --simulate snow-showers
+
+# Simulate snow grains
+weather --simulate snow-grains
+
+# Simulate thunderstorm hail
+weather --simulate thunderstorm-hail
+
+# Simulate partly cloudy
+weather --simulate partly-cloudy
+
+# Simulate cloudy
+weather --simulate cloudy
+
+# Simulate overcast
+weather --simulate overcast
+
+# Simulate fog
+weather --simulate fog
+
+# Simulate drizzle
+weather --simulate drizzle
+
+# Simulate freezing rain
+weather --simulate freezing-rain
+
+# Simulate rain showers
+weather --simulate rain-showers
+
+# Simulate snow showers
+weather --simulate snow-showers
+
+# Simulate snow grains
+weather --simulate snow-grains
+
+# Simulate thunderstorm hail
+weather --simulate thunderstorm-hail
+
+# Simulate partly cloudy
+weather --simulate partly-cloudy
+
+# Simulate cloudy
+weather --simulate cloudy
+
+# Simulate overcast
+weather --simulate overcast
+
+# Simulate fog
+weather --simulate fog
+
+# Simulate drizzle
+weather --simulate drizzle
+
+# Simulate freezing rain
+weather --simulate freezing-rain
+
+# Simulate rain showers
+weather --simulate rain-showers
+
+# Simulate snow showers
+weather --simulate snow-showers
+
+# Simulate snow grains
+weather --simulate snow-grains
+
+# Simulate thunderstorm hail
+weather --simulate thunderstorm-hail
+
+# Simulate partly cloudy
+weather --simulate partly-cloudy
+
+# Simulate cloudy
+weather --simulate cloudy
+
+# Simulate overcast
+weather --simulate overcast
+
+# Simulate fog
+weather --simulate fog
+
+# Simulate drizzle
+weather --simulate drizzle
+
+# Simulate freezing rain
+weather --simulate freezing-rain
+
+# Simulate rain showers
+weather --simulate rain-showers
+
+# Simulate snow showers
+weather --simulate snow-showers
+
+# Simulate snow grains
+weather --simulate snow-grains
+
+# Simulate thunderstorm hail
+weather --simulate thunderstorm-hail
+
+# Simulate partly cloudy
+weather --simulate partly-cloudy
+
+# Simulate cloudy
+weather --simulate cloudy
+
+# Simulate overcast
+weather --simulate overcast
+
+# Simulate fog
+weather --simulate fog
+
+# Simulate drizzle
+weather --simulate
 ```
-
-*Available Simulation States:* `clear`, `partly-cloudy`, `cloudy`, `overcast`, `fog`, `drizzle`, `rain`, `freezing-rain`, `rain-showers`, `snow`, `snow-grains`, `snow-showers`, `thunderstorm`, `thunderstorm-hail`
-
----
-
 ## ⚙️ Configuration
 
 `weather` functions beautifully out of the box but can be deeply customized using a `config.toml` file.
