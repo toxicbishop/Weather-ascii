@@ -237,6 +237,7 @@ mod tests {
             is_day: true,
             moon_phase: Some(0.5),
             timestamp: "2024-01-01T12:00:00Z".to_string(),
+            hourly_forecast: None,
         };
         app.update_weather(weather);
 
