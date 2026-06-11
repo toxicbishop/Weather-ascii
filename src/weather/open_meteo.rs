@@ -18,6 +18,14 @@ pub struct OpenMeteoProvider {
 #[derive(Debug, Deserialize)]
 struct OpenMeteoResponse {
     current: CurrentWeather,
+    hourly: Option<HourlyWeather>,
+}
+
+#[derive(Debug, Deserialize)]
+struct HourlyWeather {
+    time: Vec<String>,
+    temperature_2m: Vec<f64>,
+    weather_code: Vec<i32>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -80,7 +88,7 @@ impl OpenMeteoProvider {
 
     fn build_url(&self, location: &WeatherLocation, units: &WeatherUnits) -> String {
         format!(
-            "{}?latitude={}&longitude={}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,cloud_cover,surface_pressure,wind_speed_10m,wind_direction_10m,visibility&temperature_unit={}&wind_speed_unit={}&precipitation_unit={}&timezone=auto",
+            "{}?latitude={}&longitude={}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,cloud_cover,surface_pressure,wind_speed_10m,wind_direction_10m,visibility&hourly=temperature_2m,weather_code&temperature_unit={}&wind_speed_unit={}&precipitation_unit={}&timezone=auto",
             self.base_url,
             location.latitude,
             location.longitude,
@@ -119,6 +127,13 @@ impl WeatherProvider for OpenMeteoProvider {
 
         let moon_phase = Some(0.5);
 
+        let (hourly_times, hourly_temperatures, hourly_weather_codes) = if let Some(hourly) = data.hourly {
+            let temps = hourly.temperature_2m.into_iter().map(|t| normalize_temperature(t, units.temperature)).collect();
+            (Some(hourly.time), Some(temps), Some(hourly.weather_code))
+        } else {
+            (None, None, None)
+        };
+
         Ok(WeatherProviderResponse {
             weather_code: data.current.weather_code,
             temperature: normalize_temperature(data.current.temperature_2m, units.temperature),
@@ -136,6 +151,9 @@ impl WeatherProvider for OpenMeteoProvider {
             is_day: data.current.is_day,
             moon_phase,
             timestamp: data.current.time,
+            hourly_times,
+            hourly_temperatures,
+            hourly_weather_codes,
         })
     }
 }

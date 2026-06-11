@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
 const IPINFO_URL: &str = "https://ipinfo.io/json";
+const GEOCODING_API_URL: &str = "https://geocoding-api.open-meteo.com/v1/search";
 const MAX_RETRIES: u32 = 3;
 const INITIAL_RETRY_DELAY_MS: u64 = 500;
 
@@ -11,6 +12,18 @@ const INITIAL_RETRY_DELAY_MS: u64 = 500;
 struct IpInfoResponse {
     loc: String,
     city: Option<String>,
+}
+
+#[derive(Deserialize, Debug)]
+struct GeocodingResponse {
+    results: Option<Vec<GeocodingResult>>,
+}
+
+#[derive(Deserialize, Debug)]
+struct GeocodingResult {
+    name: String,
+    latitude: f64,
+    longitude: f64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -97,4 +110,33 @@ async fn fetch_location() -> Result<GeoLocation, GeolocationError> {
     cache::save_location_cache(&location);
 
     Ok(location)
+}
+
+pub async fn geocode_city(city: &str) -> Result<GeoLocation, GeolocationError> {
+    let client = reqwest::Client::builder()
+        .timeout(Duration::from_secs(10))
+        .connect_timeout(Duration::from_secs(5))
+        .build()
+        .map_err(|e| GeolocationError::Unreachable(NetworkError::ClientCreation(e)))?;
+
+    let url = format!("{}?name={}&count=1&format=json", GEOCODING_API_URL, city);
+    let response = client.get(&url).send().await.map_err(|e| {
+        GeolocationError::Unreachable(NetworkError::from_reqwest(e, &url, 10))
+    })?;
+
+    let geocoding_response: GeocodingResponse = response.json().await.map_err(|e| {
+        GeolocationError::Unreachable(NetworkError::from_reqwest(e, &url, 10))
+    })?;
+
+    if let Some(results) = geocoding_response.results {
+        if let Some(first_result) = results.into_iter().next() {
+            return Ok(GeoLocation {
+                latitude: first_result.latitude,
+                longitude: first_result.longitude,
+                city: Some(first_result.name),
+            });
+        }
+    }
+
+    Err(GeolocationError::ParseError(format!("City not found: {}", city)))
 }

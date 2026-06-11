@@ -14,6 +14,7 @@ pub struct AppState {
     pub location: WeatherLocation,
     pub hide_location: bool,
     pub units: WeatherUnits,
+    pub speed_multiplier: f32,
 }
 
 impl AppState {
@@ -28,6 +29,7 @@ impl AppState {
             location,
             hide_location,
             units,
+            speed_multiplier: 1.0,
         }
     }
 
@@ -111,9 +113,14 @@ impl AppState {
                 format_precipitation(weather.precipitation, self.units.precipitation);
 
             let offline_indicator = if self.is_offline { "OFFLINE | " } else { "" };
+            let speed_indicator = if (self.speed_multiplier - 1.0).abs() > 0.01 {
+                format!(" | Speed: {:.2}x", self.speed_multiplier)
+            } else {
+                String::new()
+            };
 
             format!(
-                "{}Weather: {} | Temp: {:.1}{} | Wind: {:.1}{} | Precip: {:.1}{}{} | Press 'q' to quit",
+                "{}Weather: {} | Temp: {:.1}{} | Wind: {:.1}{} | Precip: {:.1}{}{}{} | +/- to change speed | Press 'q' to quit",
                 offline_indicator,
                 self.get_condition_text(),
                 temp,
@@ -122,7 +129,8 @@ impl AppState {
                 wind_unit,
                 precip,
                 precip_unit,
-                location_str
+                location_str,
+                speed_indicator
             )
         } else {
             format!("Weather: Loading... {}", self.loading_state.current_char())
