@@ -207,12 +207,13 @@ impl Default for WeatherUnits {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub struct WeatherLocation {
     pub latitude: f64,
     pub longitude: f64,
     pub elevation: Option<f64>,
+    pub name: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

@@ -76,9 +76,10 @@ impl App {
             latitude: config.location.latitude,
             longitude: config.location.longitude,
             elevation: None,
+            name: config.location.name.clone(),
         };
 
-        let mut state = AppState::new(location, config.location.hide, config.units);
+        let mut state = AppState::new(location.clone(), config.location.hide, config.units);
         let mut animations = AnimationManager::new(term_width, term_height, show_leaves);
         let scene = WorldScene::new(term_width, term_height);
 

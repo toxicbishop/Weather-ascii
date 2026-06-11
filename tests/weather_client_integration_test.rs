@@ -11,6 +11,7 @@ async fn test_weather_client_integration_cache_behavior() {
         latitude: 52.52,
         longitude: 13.41,
         elevation: None,
+        name: None,
     };
 
     let units = WeatherUnits::default();
@@ -40,6 +41,7 @@ async fn test_weather_client_integration_cache_invalidation() {
         latitude: 52.52,
         longitude: 13.41,
         elevation: None,
+        name: None,
     };
 
     let units = WeatherUnits::default();
@@ -71,6 +73,7 @@ async fn test_weather_client_integration_realistic_weather_ranges() {
         latitude: 0.0,
         longitude: 0.0,
         elevation: None,
+        name: None,
     };
 
     let units = WeatherUnits::default();
