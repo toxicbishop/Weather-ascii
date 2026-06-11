@@ -89,6 +89,8 @@ impl AppState {
 
         let location_str = if self.hide_location {
             String::new()
+        } else if let Some(ref name) = self.location.name {
+            format!(" | Location: {}", name)
         } else {
             let (lat_value, lat_dir) = if self.location.latitude >= 0.0 {
                 (self.location.latitude, "N")
@@ -215,6 +217,7 @@ mod tests {
             latitude: lat,
             longitude: lon,
             elevation: None,
+            name: None,
         };
         let units = WeatherUnits {
             temperature: TemperatureUnit::Celsius,

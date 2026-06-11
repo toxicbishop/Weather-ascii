@@ -207,6 +207,7 @@ async fn main() -> io::Result<()> {
                 );
                 config.location.latitude = geo_loc.latitude;
                 config.location.longitude = geo_loc.longitude;
+                config.location.name = Some(geo_loc.city.unwrap_or(city));
                 config.location.auto = false; // Disable auto to use this city
             }
             Err(e) => {
@@ -237,6 +238,7 @@ async fn main() -> io::Result<()> {
                 }
                 config.location.latitude = geo_loc.latitude;
                 config.location.longitude = geo_loc.longitude;
+                config.location.name = geo_loc.city;
             }
             Err(e) => {
                 eprintln!("{}", e.user_friendly_message());

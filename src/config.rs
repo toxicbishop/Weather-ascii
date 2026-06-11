@@ -27,6 +27,8 @@ pub struct Location {
     pub auto: bool,
     #[serde(default)]
     pub hide: bool,
+    #[serde(default)]
+    pub name: Option<String>,
 }
 
 fn default_latitude() -> f64 {
@@ -44,6 +46,7 @@ impl Default for Location {
             longitude: default_longitude(),
             auto: true,
             hide: false,
+            name: None,
         }
     }
 }
@@ -214,6 +217,7 @@ longitude = 0.0
                 longitude: 0.0,
                 auto: false,
                 hide: false,
+                name: None,
             },
             hide_hud: false,
             units: WeatherUnits::default(),
@@ -232,6 +236,7 @@ longitude = 0.0
                 longitude: 0.0,
                 auto: false,
                 hide: false,
+                name: None,
             },
             hide_hud: false,
             units: WeatherUnits::default(),
@@ -250,6 +255,7 @@ longitude = 0.0
                 longitude: 181.0,
                 auto: false,
                 hide: false,
+                name: None,
             },
             hide_hud: false,
             units: WeatherUnits::default(),
@@ -268,6 +274,7 @@ longitude = 0.0
                 longitude: -181.0,
                 auto: false,
                 hide: false,
+                name: None,
             },
             hide_hud: false,
             units: WeatherUnits::default(),
@@ -286,6 +293,7 @@ longitude = 0.0
                 longitude: 13.41,
                 auto: false,
                 hide: false,
+                name: None,
             },
             hide_hud: false,
             units: WeatherUnits::default(),
