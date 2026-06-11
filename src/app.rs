@@ -14,8 +14,7 @@ use std::time::Duration;
 use tokio::sync::mpsc;
 
 const REFRESH_INTERVAL: Duration = Duration::from_secs(300);
-const INPUT_POLL_FPS: u64 = 30;
-const FRAME_DURATION: Duration = Duration::from_millis(1000 / INPUT_POLL_FPS);
+const INPUT_POLL_FPS: u64 = 60;
 
 fn generate_offline_weather(rng: &mut impl rand::Rng) -> WeatherData {
     use chrono::{Local, Timelike};
@@ -52,6 +51,7 @@ fn generate_offline_weather(rng: &mut impl rand::Rng) -> WeatherData {
         is_day,
         moon_phase: Some(0.5),
         timestamp: now.format("%Y-%m-%dT%H:%M:%S").to_string(),
+        hourly_forecast: None,
     }
 }
 
@@ -115,6 +115,7 @@ impl App {
                 is_day: !simulate_night,
                 moon_phase: Some(0.5),
                 timestamp: "simulated".to_string(),
+                hourly_forecast: None,
             };
 
             let rain_intensity = weather.condition.rain_intensity();
@@ -231,6 +232,8 @@ impl App {
                 &mut rng,
             )?;
 
+            self.render_hourly_forecast(renderer, term_width, term_height)?;
+
             self.state.update_loading_animation();
             self.state.update_cached_info();
 
@@ -245,7 +248,10 @@ impl App {
 
             renderer.flush()?;
 
-            if event::poll(FRAME_DURATION)? {
+            let current_poll_fps = INPUT_POLL_FPS as f32 * self.state.speed_multiplier;
+            let current_frame_duration = Duration::from_millis((1000.0 / current_poll_fps.max(1.0)) as u64);
+
+            if event::poll(current_frame_duration)? {
                 match event::read()? {
                     Event::Resize(width, height) => {
                         renderer.manual_resize(width, height)?;
@@ -256,6 +262,14 @@ impl App {
                             if key_event.modifiers.contains(KeyModifiers::CONTROL) =>
                         {
                             break;
+                        }
+                        KeyCode::Char('+') | KeyCode::Char('=') => {
+                            self.state.speed_multiplier = (self.state.speed_multiplier + 0.25).min(4.0);
+                            self.state.weather_info_needs_update = true;
+                        }
+                        KeyCode::Char('-') => {
+                            self.state.speed_multiplier = (self.state.speed_multiplier - 0.25).max(0.25);
+                            self.state.weather_info_needs_update = true;
                         }
                         _ => {}
                     },
@@ -270,6 +284,89 @@ impl App {
                 .update_sunny_animation(&self.state.weather_conditions);
         }
 
+        Ok(())
+    }
+
+    fn render_hourly_forecast(
+        &self,
+        renderer: &mut TerminalRenderer,
+        term_width: u16,
+        term_height: u16,
+    ) -> io::Result<()> {
+        if let Some(weather) = &self.state.current_weather {
+            if let Some(hourly) = &weather.hourly_forecast {
+                if hourly.is_empty() {
+                    return Ok(());
+                }
+
+                let panel_height = 6;
+                if term_height <= panel_height + 15 {
+                    return Ok(()); // Terminal too small to show both scenes and panel
+                }
+
+                let start_y = term_height - panel_height;
+
+                let min_temp = hourly.iter().map(|h| h.temperature).fold(f64::INFINITY, f64::min);
+                let max_temp = hourly.iter().map(|h| h.temperature).fold(f64::NEG_INFINITY, f64::max);
+                let temp_range = (max_temp - min_temp).max(1.0);
+
+                let chart_height = 4;
+
+                let total_width = hourly.len() * 6;
+                let start_x = if term_width as usize > total_width {
+                    (term_width as usize - total_width) / 2
+                } else {
+                    0
+                };
+
+                let blocks = [' ', '▂', '▃', '▄', '▅', '▆', '▇', '█'];
+
+                for (i, forecast) in hourly.iter().enumerate() {
+                    let col_x = start_x + i * 6;
+                    if col_x + 5 >= term_width as usize {
+                        break;
+                    }
+
+                    let normalized = (forecast.temperature - min_temp) / temp_range;
+                    let bar_levels = (normalized * (chart_height * 8) as f64).round() as usize;
+
+                    for h in 0..chart_height {
+                        let row_y = start_y + (chart_height - 1 - h) as u16;
+                        let block_idx = if bar_levels >= (h + 1) * 8 {
+                            7
+                        } else if bar_levels > h * 8 {
+                            bar_levels - h * 8 - 1
+                        } else {
+                            0
+                        };
+                        
+                        let ch = blocks[block_idx];
+                        if ch != ' ' {
+                            let color = crossterm::style::Color::DarkCyan;
+                            for dx in 0..4 {
+                                renderer.render_char((col_x + dx) as u16, row_y, ch, color)?;
+                            }
+                        }
+                    }
+
+                    let time_str = forecast.time.split('T').last().unwrap_or("00:00");
+                    renderer.render_line_colored(
+                        col_x as u16,
+                        start_y + chart_height as u16,
+                        time_str,
+                        crossterm::style::Color::White,
+                    )?;
+
+                    let temp_str = format!("{:.0}°", forecast.temperature);
+                    renderer.render_line_colored(
+                        col_x as u16,
+                        start_y + chart_height as u16 + 1,
+                        &temp_str,
+                        crossterm::style::Color::Yellow,
+                    )?;
+                }
+            }
+        }
         Ok(())
     }
 }

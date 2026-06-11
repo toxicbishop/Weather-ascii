@@ -60,6 +60,9 @@ struct Cli {
     #[arg(short, long, help = "Enable falling autumn leaves")]
     leaves: bool,
 
+    #[arg(short, long, help = "Specify a city name to get weather for")]
+    city: Option<String>,
+
     #[arg(long, help = "Auto-detect location via IP (uses ipinfo.io)")]
     auto_location: bool,
 
@@ -188,8 +191,30 @@ async fn main() -> io::Result<()> {
         config.silent = true;
     }
 
-    // Auto-detect location if enabled
-    if config.location.auto {
+    // Location determination
+    if let Some(city) = cli.city {
+        info(config.silent, &format!("Geocoding city: {}...", city));
+        match geolocation::geocode_city(&city).await {
+            Ok(geo_loc) => {
+                info(
+                    config.silent,
+                    &format!(
+                        "Location detected: {} ({:.4}, {:.4})",
+                        geo_loc.city.as_deref().unwrap_or(&city),
+                        geo_loc.latitude,
+                        geo_loc.longitude
+                    ),
+                );
+                config.location.latitude = geo_loc.latitude;
+                config.location.longitude = geo_loc.longitude;
+                config.location.auto = false; // Disable auto to use this city
+            }
+            Err(e) => {
+                eprintln!("{}", e.user_friendly_message());
+                std::process::exit(1);
+            }
+        }
+    } else if config.location.auto {
         info(config.silent, "Auto-detecting location...");
         match geolocation::detect_location().await {
             Ok(geo_loc) => {

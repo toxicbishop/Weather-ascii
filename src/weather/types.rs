@@ -150,6 +150,14 @@ pub enum PrecipitationUnit {
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 #[allow(dead_code)]
+pub struct HourlyForecast {
+    pub time: String,
+    pub temperature: f64,
+    pub condition: WeatherCondition,
+}
+
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[allow(dead_code)]
 pub struct WeatherData {
     pub condition: WeatherCondition,
     pub temperature: f64,
@@ -164,6 +172,7 @@ pub struct WeatherData {
     pub is_day: bool,
     pub moon_phase: Option<f64>,
     pub timestamp: String,
+    pub hourly_forecast: Option<Vec<HourlyForecast>>,
 }
 
 #[derive(Debug, Clone, Copy, serde::Deserialize)]

@@ -16,9 +16,9 @@ Experience rain drops falling across your terminal, lightning strikes on a storm
 
 <div align="center">
 
-| Thunderstorm Night | Snow |
-| :---: | :---: |
-| <img src="docs/thunderstorm-night.gif" width="600" alt="Thunderstorm Night"> | <img src="docs/snow.gif" width="600" alt="Snow"> |
+| Thunderstorm Night | Snow | Night |
+| :---: | :---: | :---: |
+| <img src="docs/thunderstorm-night.gif" width="600" alt="Thunderstorm Night"> | <img src="docs/snow.gif" width="600" alt="Snow"> | <img src="docs/night.gif" width="600" alt="Night"> |
 
 </div>
 

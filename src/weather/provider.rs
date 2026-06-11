@@ -18,6 +18,9 @@ pub struct WeatherProviderResponse {
     pub is_day: i32,
     pub moon_phase: Option<f64>,
     pub timestamp: String,
+    pub hourly_times: Option<Vec<String>>,
+    pub hourly_temperatures: Option<Vec<f64>>,
+    pub hourly_weather_codes: Option<Vec<i32>>,
 }
 
 #[async_trait]

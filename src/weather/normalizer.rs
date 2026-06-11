@@ -7,6 +7,37 @@ impl WeatherNormalizer {
     pub fn normalize(response: WeatherProviderResponse) -> WeatherData {
         let condition = Self::wmo_code_to_condition(response.weather_code);
 
+        let hourly_forecast = if let (Some(times), Some(temps), Some(codes)) = (
+            response.hourly_times,
+            response.hourly_temperatures,
+            response.hourly_weather_codes,
+        ) {
+            let mut forecast = Vec::new();
+            let len = times.len().min(temps.len()).min(codes.len());
+            let current_time = &response.timestamp;
+            
+            let mut started = false;
+            for i in 0..len {
+                if !started && &times[i] >= current_time {
+                    started = true;
+                }
+                
+                if started {
+                    forecast.push(crate::weather::types::HourlyForecast {
+                        time: times[i].clone(),
+                        temperature: temps[i],
+                        condition: Self::wmo_code_to_condition(codes[i]),
+                    });
+                    if forecast.len() >= 12 {
+                        break;
+                    }
+                }
+            }
+            Some(forecast)
+        } else {
+            None
+        };
+
         WeatherData {
             condition,
             temperature: response.temperature,
@@ -21,6 +52,7 @@ impl WeatherNormalizer {
             is_day: response.is_day == 1,
             moon_phase: response.moon_phase,
             timestamp: response.timestamp,
+            hourly_forecast,
         }
     }
 
@@ -110,6 +142,9 @@ mod tests {
             is_day: 1,
             moon_phase: Some(0.5),
             timestamp: "2024-01-01T12:00".to_string(),
+            hourly_times: None,
+            hourly_temperatures: None,
+            hourly_weather_codes: None,
         };
 
         let data = WeatherNormalizer::normalize(response);
