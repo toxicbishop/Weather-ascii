@@ -2,7 +2,7 @@
 <div align="center">
   <h1 align="center">🌤️ weather</h1>
 
-  [![Build Status](https://github.com/toxicbishop/weather/actions/workflows/build.yml/badge.svg)](https://github.com/toxicbishop/weather/actions/workflows/build.yml)
+  [![Build Status](https://github.com/toxicbishop/Weather-ascii/actions/workflows/ci.yml/badge.svg)](https://github.com/toxicbishop/Weather-ascii/actions/workflows/ci.yml)
   ![Rust](https://img.shields.io/badge/Rust-000000?style=flat-square&logo=rust&logoColor=white)
   ![License: GPL 3.0](https://img.shields.io/badge/License-GPL%203.0-blue.svg)
   ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)
