@@ -175,6 +175,54 @@ pub struct WeatherData {
     pub hourly_forecast: Option<Vec<HourlyForecast>>,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum AqiCategory {
+    Good,
+    Fair,
+    Moderate,
+    Poor,
+    VeryPoor,
+    ExtremelyPoor,
+}
+
+impl AqiCategory {
+    pub fn from_european_aqi(aqi: f64) -> Self {
+        if aqi <= 20.0 {
+            Self::Good
+        } else if aqi <= 40.0 {
+            Self::Fair
+        } else if aqi <= 60.0 {
+            Self::Moderate
+        } else if aqi <= 80.0 {
+            Self::Poor
+        } else if aqi <= 100.0 {
+            Self::VeryPoor
+        } else {
+            Self::ExtremelyPoor
+        }
+    }
+
+    pub fn to_string(&self) -> &'static str {
+        match self {
+            Self::Good => "Good",
+            Self::Fair => "Fair",
+            Self::Moderate => "Moderate",
+            Self::Poor => "Poor",
+            Self::VeryPoor => "Very Poor",
+            Self::ExtremelyPoor => "Extremely Poor",
+        }
+    }
+}
+
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[allow(dead_code)]
+pub struct AirQualityData {
+    pub aqi: f64,
+    pub pm2_5: f64,
+    pub pm10: f64,
+    pub ozone: f64,
+}
+
 #[derive(Debug, Clone, Copy, serde::Deserialize)]
 #[serde(default)]
 pub struct WeatherUnits {

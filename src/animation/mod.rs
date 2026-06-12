@@ -7,6 +7,7 @@ pub mod fog;
 pub mod leaves;
 pub mod moon;
 pub mod raindrops;
+pub mod smog;
 pub mod snow;
 pub mod stars;
 pub mod sunny;

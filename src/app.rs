@@ -13,6 +13,11 @@ use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::mpsc;
 
+type UpdateTuple = (
+    Result<WeatherData, WeatherError>,
+    Option<Result<crate::weather::AirQualityData, WeatherError>>,
+);
+
 const REFRESH_INTERVAL: Duration = Duration::from_secs(300);
 const INPUT_POLL_FPS: u64 = 60;
 
@@ -59,8 +64,9 @@ pub struct App {
     state: AppState,
     animations: AnimationManager,
     scene: WorldScene,
-    weather_receiver: mpsc::Receiver<Result<WeatherData, WeatherError>>,
+    weather_receiver: mpsc::Receiver<UpdateTuple>,
     hide_hud: bool,
+    show_aqi: bool,
 }
 
 impl App {
@@ -84,6 +90,7 @@ impl App {
         let scene = WorldScene::new(term_width, term_height);
 
         let (tx, rx) = mpsc::channel(1);
+        let show_aqi = config.show_aqi;
 
         if let Some(ref condition_str) = simulate_condition {
             let simulated_condition =
@@ -132,14 +139,26 @@ impl App {
         } else {
             let provider = Arc::new(OpenMeteoProvider::new());
             let weather_client = WeatherClient::new(provider, REFRESH_INTERVAL);
+            let aqi_provider = Arc::new(crate::weather::OpenMeteoAqiProvider::new());
             let units = config.units;
 
             tokio::spawn(async move {
                 loop {
-                    let result = weather_client.get_current_weather(&location, &units).await;
-                    if tx.send(result).await.is_err() {
-                        break;
+                    let weather_future = weather_client.get_current_weather(&location, &units);
+                    
+                    if show_aqi {
+                        let aqi_future = aqi_provider.get_current_aqi(&location);
+                        let (weather_res, aqi_res) = tokio::join!(weather_future, aqi_future);
+                        if tx.send((weather_res, Some(aqi_res))).await.is_err() {
+                            break;
+                        }
+                    } else {
+                        let weather_res = weather_future.await;
+                        if tx.send((weather_res, None)).await.is_err() {
+                            break;
+                        }
                     }
+
                     tokio::time::sleep(REFRESH_INTERVAL).await;
                 }
             });
@@ -151,14 +170,22 @@ impl App {
             scene,
             weather_receiver: rx,
             hide_hud: config.hide_hud,
+            show_aqi: config.show_aqi,
         }
     }
 
     pub async fn run(&mut self, renderer: &mut TerminalRenderer) -> io::Result<()> {
         let mut rng = rand::rng();
         loop {
-            if let Ok(result) = self.weather_receiver.try_recv() {
-                match result {
+            if let Ok((weather_result, aqi_result_opt)) = self.weather_receiver.try_recv() {
+                if let Some(aqi_result) = aqi_result_opt {
+                    match aqi_result {
+                        Ok(aqi_data) => self.state.update_aqi(aqi_data),
+                        Err(_e) => {} // Fail silently if AQI is down
+                    }
+                }
+
+                match weather_result {
                     Ok(weather) => {
                         let rain_intensity = weather.condition.rain_intensity();
                         let snow_intensity = weather.condition.snow_intensity();
@@ -228,6 +255,7 @@ impl App {
             self.animations.render_foreground(
                 renderer,
                 &self.state.weather_conditions,
+                &self.state,
                 term_width,
                 term_height,
                 &mut rng,
@@ -245,6 +273,12 @@ impl App {
                     &self.state.cached_weather_info,
                     crossterm::style::Color::Cyan,
                 )?;
+            }
+
+            if self.show_aqi {
+                if let Some(ref aqi) = self.state.current_aqi {
+                    self.render_aqi_panel(renderer, aqi, term_width, term_height)?;
+                }
             }
 
             renderer.flush()?;
@@ -368,6 +402,59 @@ impl App {
                 }
             }
         }
+        Ok(())
+    }
+
+    fn render_aqi_panel(
+        &self,
+        renderer: &mut TerminalRenderer,
+        aqi: &crate::weather::AirQualityData,
+        term_width: u16,
+        term_height: u16,
+    ) -> io::Result<()> {
+        let category = crate::weather::AqiCategory::from_european_aqi(aqi.aqi);
+        let color = match category {
+            crate::weather::AqiCategory::Good => crossterm::style::Color::Green,
+            crate::weather::AqiCategory::Fair => crossterm::style::Color::Yellow,
+            crate::weather::AqiCategory::Moderate => crossterm::style::Color::DarkYellow,
+            crate::weather::AqiCategory::Poor => crossterm::style::Color::Red,
+            crate::weather::AqiCategory::VeryPoor => crossterm::style::Color::DarkRed,
+            crate::weather::AqiCategory::ExtremelyPoor => crossterm::style::Color::Magenta,
+        };
+
+        let lines = [
+            format!(" AQI: {:.0} ({}) ", aqi.aqi, category.to_string()),
+            format!(" PM2.5: {:.0} μg/m³ ", aqi.pm2_5),
+            format!(" PM10 : {:.0} μg/m³ ", aqi.pm10),
+            format!(" Ozone: {:.0} μg/m³ ", aqi.ozone),
+        ];
+
+        let max_len = lines.iter().map(|l| l.chars().count()).max().unwrap_or(0);
+        let panel_width = max_len as u16 + 2; // +2 for borders
+        let panel_height = lines.len() as u16 + 2;
+
+        if term_width < panel_width + 4 || term_height < panel_height + 4 {
+            return Ok(());
+        }
+
+        // Top right corner
+        let start_x = term_width - panel_width - 2;
+        let start_y = 2; // Below HUD
+
+        // Draw top border
+        let top_border = format!("┌{}┐", "─".repeat(max_len));
+        renderer.render_line_colored(start_x, start_y, &top_border, color)?;
+
+        // Draw lines
+        for (i, line) in lines.iter().enumerate() {
+            let padded_line = format!("│{:<width$}│", line, width = max_len);
+            renderer.render_line_colored(start_x, start_y + 1 + i as u16, &padded_line, color)?;
+        }
+
+        // Draw bottom border
+        let bottom_border = format!("└{}┘", "─".repeat(max_len));
+        renderer.render_line_colored(start_x, start_y + panel_height - 1, &bottom_border, color)?;
+
         Ok(())
     }
 }
