@@ -532,9 +532,9 @@ precipitation = "mm"    # Options: "mm", "inch"
 - [x] Initial release features & auto-location fetching
 - [x] GNU GPL-3.0 License migration
 - [x] Add dynamic UFO and Airplane animations
+- [x] Implement keybindings to pause/speed up animations interactively
+- [x] Additional weather simulation patterns
 - [ ] Support for multiple API keys (OpenWeatherMap, WeatherAPI, etc.)
-- [ ] Implement keybindings to pause/speed up animations interactively
-- [ ] Additional weather simulation patterns
 
 ---
 
