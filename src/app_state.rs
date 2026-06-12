@@ -6,6 +6,7 @@ use std::time::Instant;
 
 pub struct AppState {
     pub current_weather: Option<WeatherData>,
+    pub current_aqi: Option<crate::weather::AirQualityData>,
     pub is_offline: bool,
     pub weather_conditions: WeatherConditions,
     pub loading_state: LoadingState,
@@ -21,6 +22,7 @@ impl AppState {
     pub fn new(location: WeatherLocation, hide_location: bool, units: WeatherUnits) -> Self {
         Self {
             current_weather: None,
+            current_aqi: None,
             is_offline: false,
             weather_conditions: WeatherConditions::default(),
             loading_state: LoadingState::new(),
@@ -50,6 +52,18 @@ impl AppState {
     pub fn set_offline_mode(&mut self, offline: bool) {
         self.is_offline = offline;
         self.weather_info_needs_update = true;
+    }
+
+    pub fn update_aqi(&mut self, aqi_data: crate::weather::AirQualityData) {
+        self.current_aqi = Some(aqi_data);
+    }
+
+    pub fn should_show_smog(&self) -> bool {
+        if let Some(ref aqi) = self.current_aqi {
+            aqi.aqi > 60.0 // threshold for Moderate/Poor
+        } else {
+            false
+        }
     }
 
     pub fn update_loading_animation(&mut self) {

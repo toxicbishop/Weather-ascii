@@ -1,7 +1,7 @@
 use crate::animation::{
     AnimationController, airplanes::AirplaneSystem, birds::BirdSystem, chimney::ChimneySmoke,
     clouds::CloudSystem, fireflies::FireflySystem, fog::FogSystem, leaves::FallingLeaves,
-    moon::MoonSystem, raindrops::RaindropSystem, snow::SnowSystem, stars::StarSystem,
+    moon::MoonSystem, raindrops::RaindropSystem, smog::Smog, snow::SnowSystem, stars::StarSystem,
     sunny::SunnyAnimation, thunderstorm::ThunderstormSystem, ufo::UfoSystem,
 };
 use crate::app_state::AppState;
@@ -30,6 +30,7 @@ pub struct AnimationManager {
     firefly_system: FireflySystem,
     falling_leaves: FallingLeaves,
     sunny_animation: SunnyAnimation,
+    smog_system: Smog,
     animation_controller: AnimationController,
     last_frame_time: Instant,
     show_leaves: bool,
@@ -52,6 +53,7 @@ impl AnimationManager {
             firefly_system: FireflySystem::new(term_width, term_height),
             falling_leaves: FallingLeaves::new(term_width, term_height),
             sunny_animation: SunnyAnimation::new(),
+            smog_system: Smog::new(term_width, term_height),
             animation_controller: AnimationController::new(),
             last_frame_time: Instant::now(),
             show_leaves,
@@ -189,6 +191,7 @@ impl AnimationManager {
         &mut self,
         renderer: &mut TerminalRenderer,
         conditions: &WeatherConditions,
+        state: &AppState,
         term_width: u16,
         term_height: u16,
         mut rng: &mut impl rand::Rng,
@@ -228,6 +231,10 @@ impl AnimationManager {
                 .update(term_width, term_height, &mut rng);
             self.falling_leaves.render(renderer)?;
         }
+
+        self.smog_system.resize(term_width, term_height);
+        self.smog_system.update(state.should_show_smog(), state.speed_multiplier, conditions, &mut rng);
+        self.smog_system.render(renderer, state.should_show_smog(), conditions.is_day)?;
 
         Ok(())
     }

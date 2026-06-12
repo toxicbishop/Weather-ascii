@@ -15,6 +15,8 @@ pub struct Config {
     pub units: WeatherUnits,
     #[serde(default)]
     pub silent: bool,
+    #[serde(default)]
+    pub show_aqi: bool,
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -220,6 +222,7 @@ longitude = 0.0
                 name: None,
             },
             hide_hud: false,
+            show_aqi: false,
             units: WeatherUnits::default(),
             silent: false,
         };
@@ -239,6 +242,7 @@ longitude = 0.0
                 name: None,
             },
             hide_hud: false,
+            show_aqi: false,
             units: WeatherUnits::default(),
             silent: false,
         };
@@ -258,6 +262,7 @@ longitude = 0.0
                 name: None,
             },
             hide_hud: false,
+            show_aqi: false,
             units: WeatherUnits::default(),
             silent: false,
         };
@@ -277,6 +282,7 @@ longitude = 0.0
                 name: None,
             },
             hide_hud: false,
+            show_aqi: false,
             units: WeatherUnits::default(),
             silent: false,
         };
@@ -296,6 +302,7 @@ longitude = 0.0
                 name: None,
             },
             hide_hud: false,
+            show_aqi: false,
             units: WeatherUnits::default(),
             silent: false,
         };
