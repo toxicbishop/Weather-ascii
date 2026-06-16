@@ -154,6 +154,8 @@ pub struct HourlyForecast {
     pub time: String,
     pub temperature: f64,
     pub condition: WeatherCondition,
+    pub precipitation_probability: f64,
+    pub wind_speed: f64,
 }
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]

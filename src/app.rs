@@ -67,6 +67,7 @@ pub struct App {
     weather_receiver: mpsc::Receiver<UpdateTuple>,
     hide_hud: bool,
     show_aqi: bool,
+    show_hourly_forecast: bool,
 }
 
 impl App {
@@ -171,6 +172,7 @@ impl App {
             weather_receiver: rx,
             hide_hud: config.hide_hud,
             show_aqi: config.show_aqi,
+            show_hourly_forecast: config.show_hourly_forecast,
         }
     }
 
@@ -261,7 +263,9 @@ impl App {
                 &mut rng,
             )?;
 
-            self.render_hourly_forecast(renderer, term_width, term_height)?;
+            if self.show_hourly_forecast {
+                self.render_hourly_forecast(renderer, term_width, term_height)?;
+            }
 
             self.state.update_loading_animation();
             self.state.update_cached_info();
@@ -340,64 +344,69 @@ impl App {
                 }
 
                 let start_y = term_height - panel_height;
-
-                let min_temp = hourly.iter().map(|h| h.temperature).fold(f64::INFINITY, f64::min);
-                let max_temp = hourly.iter().map(|h| h.temperature).fold(f64::NEG_INFINITY, f64::max);
-                let temp_range = (max_temp - min_temp).max(1.0);
-
-                let chart_height = 4;
-
-                let total_width = hourly.len() * 6;
+                let num_items = hourly.len().min(12);
+                let col_width = 12;
+                let total_width = num_items * col_width;
                 let start_x = if term_width as usize > total_width {
                     (term_width as usize - total_width) / 2
                 } else {
                     0
                 };
 
-                let blocks = [' ', '▂', '▃', '▄', '▅', '▆', '▇', '█'];
-
-                for (i, forecast) in hourly.iter().enumerate() {
-                    let col_x = start_x + i * 6;
-                    if col_x + 5 >= term_width as usize {
+                for (i, forecast) in hourly.iter().take(num_items).enumerate() {
+                    let col_x = start_x + i * col_width;
+                    if col_x + col_width >= term_width as usize {
                         break;
                     }
 
-                    let normalized = (forecast.temperature - min_temp) / temp_range;
-                    let bar_levels = (normalized * (chart_height * 8) as f64).round() as usize;
-
-                    for h in 0..chart_height {
-                        let row_y = start_y + (chart_height - 1 - h) as u16;
-                        let block_idx = if bar_levels >= (h + 1) * 8 {
-                            7
-                        } else if bar_levels > h * 8 {
-                            bar_levels - h * 8 - 1
-                        } else {
-                            0
-                        };
-                        
-                        let ch = blocks[block_idx];
-                        if ch != ' ' {
-                            let color = crossterm::style::Color::DarkCyan;
-                            for dx in 0..4 {
-                                renderer.render_char((col_x + dx) as u16, row_y, ch, color)?;
-                            }
-                        }
-                    }
-
+                    // Time
                     let time_str = forecast.time.split('T').last().unwrap_or("00:00");
+                    let time_display = format!("{:^12}", time_str);
                     renderer.render_line_colored(
                         col_x as u16,
-                        start_y + chart_height as u16,
-                        time_str,
+                        start_y,
+                        &time_display,
                         crossterm::style::Color::White,
                     )?;
 
-                    let temp_str = format!("{:.0}°", forecast.temperature);
+                    // Condition icon & Temp
+                    let icon = match forecast.condition {
+                        WeatherCondition::Clear => "☀",
+                        WeatherCondition::PartlyCloudy | WeatherCondition::Cloudy | WeatherCondition::Overcast => "☁",
+                        WeatherCondition::Fog => "🌫",
+                        WeatherCondition::Drizzle | WeatherCondition::Rain | WeatherCondition::RainShowers => "🌧",
+                        WeatherCondition::Snow | WeatherCondition::SnowGrains | WeatherCondition::SnowShowers => "❄",
+                        WeatherCondition::Thunderstorm | WeatherCondition::ThunderstormHail => "🌩",
+                        WeatherCondition::FreezingRain => "🌧❄",
+                    };
+                    let temp_str = format!("{} {:.0}°", icon, forecast.temperature);
+                    let temp_display = format!("{:^12}", temp_str);
                     renderer.render_line_colored(
                         col_x as u16,
-                        start_y + chart_height as u16 + 1,
-                        &temp_str,
+                        start_y + 1,
+                        &temp_display,
                         crossterm::style::Color::Yellow,
+                    )?;
+
+                    // Precipitation Prob
+                    let precip_str = format!("💧 {:.0}%", forecast.precipitation_probability);
+                    let precip_display = format!("{:^12}", precip_str);
+                    renderer.render_line_colored(
+                        col_x as u16,
+                        start_y + 2,
+                        &precip_display,
+                        crossterm::style::Color::Cyan,
+                    )?;
+
+                    // Wind Speed
+                    let (wind_val, wind_unit) = crate::weather::format_wind_speed(forecast.wind_speed, self.state.units.wind_speed);
+                    let wind_str = format!("🌬 {}{}", wind_val, wind_unit);
+                    let wind_display = format!("{:^12}", wind_str);
+                    renderer.render_line_colored(
+                        col_x as u16,
+                        start_y + 3,
+                        &wind_display,
+                        crossterm::style::Color::DarkGrey,
                     )?;
                 }
             }

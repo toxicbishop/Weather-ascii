@@ -7,13 +7,15 @@ impl WeatherNormalizer {
     pub fn normalize(response: WeatherProviderResponse) -> WeatherData {
         let condition = Self::wmo_code_to_condition(response.weather_code);
 
-        let hourly_forecast = if let (Some(times), Some(temps), Some(codes)) = (
+        let hourly_forecast = if let (Some(times), Some(temps), Some(codes), Some(precips), Some(winds)) = (
             response.hourly_times,
             response.hourly_temperatures,
             response.hourly_weather_codes,
+            response.hourly_precipitation_probabilities,
+            response.hourly_wind_speeds,
         ) {
             let mut forecast = Vec::new();
-            let len = times.len().min(temps.len()).min(codes.len());
+            let len = times.len().min(temps.len()).min(codes.len()).min(precips.len()).min(winds.len());
             let current_time = &response.timestamp;
             
             let mut started = false;
@@ -27,6 +29,8 @@ impl WeatherNormalizer {
                         time: times[i].clone(),
                         temperature: temps[i],
                         condition: Self::wmo_code_to_condition(codes[i]),
+                        precipitation_probability: precips[i],
+                        wind_speed: winds[i],
                     });
                     if forecast.len() >= 12 {
                         break;
@@ -145,6 +149,8 @@ mod tests {
             hourly_times: None,
             hourly_temperatures: None,
             hourly_weather_codes: None,
+            hourly_precipitation_probabilities: None,
+            hourly_wind_speeds: None,
         };
 
         let data = WeatherNormalizer::normalize(response);

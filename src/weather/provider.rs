@@ -21,6 +21,8 @@ pub struct WeatherProviderResponse {
     pub hourly_times: Option<Vec<String>>,
     pub hourly_temperatures: Option<Vec<f64>>,
     pub hourly_weather_codes: Option<Vec<i32>>,
+    pub hourly_precipitation_probabilities: Option<Vec<f64>>,
+    pub hourly_wind_speeds: Option<Vec<f64>>,
 }
 
 #[async_trait]
