@@ -16,7 +16,7 @@ exclude = [".github/", "docs/"]
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-toml = "0.9"
+toml = "1.1"
 dirs = "6.0"
 crossterm = "0.29"
 tokio = { version = "1", features = [
@@ -33,7 +33,7 @@ clap = { version = "4.5", features = ["derive"] }
 rand = "0.10"
 chrono = "0.4"
 thiserror = "2.0"
-clap_complete = "4.5.66"
+clap_complete = "4.6.8"
 
 [profile.release]
 lto = "thin"
