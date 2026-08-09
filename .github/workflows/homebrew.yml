@@ -43,7 +43,7 @@ jobs:
           cat hashes.txt
 
       - name: Checkout Homebrew tap
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: Veirt/homebrew-veirt
           token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
