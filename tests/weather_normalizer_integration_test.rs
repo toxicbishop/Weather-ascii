@@ -53,6 +53,8 @@ fn test_weather_normalizer_integration_all_wmo_codes() {
             hourly_times: None,
             hourly_temperatures: None,
             hourly_weather_codes: None,
+            hourly_precipitation_probabilities: None,
+            hourly_wind_speeds: None,
         };
 
         let weather = WeatherNormalizer::normalize(response);
@@ -83,6 +85,8 @@ fn test_weather_normalizer_integration_day_night() {
         hourly_times: None,
         hourly_temperatures: None,
         hourly_weather_codes: None,
+        hourly_precipitation_probabilities: None,
+        hourly_wind_speeds: None,
     };
 
     let response_night = WeatherProviderResponse {
@@ -102,6 +106,8 @@ fn test_weather_normalizer_integration_day_night() {
         hourly_times: None,
         hourly_temperatures: None,
         hourly_weather_codes: None,
+        hourly_precipitation_probabilities: None,
+        hourly_wind_speeds: None,
     };
 
     let weather_day = WeatherNormalizer::normalize(response_day);
@@ -130,6 +136,8 @@ fn test_weather_normalizer_integration_clear_conditions() {
         hourly_times: None,
         hourly_temperatures: None,
         hourly_weather_codes: None,
+        hourly_precipitation_probabilities: None,
+        hourly_wind_speeds: None,
     };
 
     let weather = WeatherNormalizer::normalize(response);
@@ -161,6 +169,8 @@ fn test_weather_normalizer_integration_rainy_conditions() {
         hourly_times: None,
         hourly_temperatures: None,
         hourly_weather_codes: None,
+        hourly_precipitation_probabilities: None,
+        hourly_wind_speeds: None,
     };
 
     let weather = WeatherNormalizer::normalize(response);
@@ -189,6 +199,8 @@ fn test_weather_normalizer_integration_snowy_conditions() {
         hourly_times: None,
         hourly_temperatures: None,
         hourly_weather_codes: None,
+        hourly_precipitation_probabilities: None,
+        hourly_wind_speeds: None,
     };
 
     let weather = WeatherNormalizer::normalize(response);
